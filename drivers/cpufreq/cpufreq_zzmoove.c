@@ -680,7 +680,7 @@
 
 // ZZ: include profiles header file and set name for 'custom' profile (informational for a changed profile value)
 #include "cpufreq_zzmoove_profiles.h"
-#define DEF_PROFILE_NUMBER				(0)	// ZZ: default profile number (profile = 0 = 'none' = tuneable mode)
+#define DEF_PROFILE_NUMBER				(1)	// ZZ: default profile number (profile = 0 = 'none' = tuneable mode)
 static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any profile value has changed
 
 // ff: allows tuneables to be tweaked without reverting to "custom" profile
@@ -818,7 +818,7 @@ static char custom_profile[20] = "custom";			// ZZ: name to show in sysfs if any
 #define DEF_INPUTBOOST_CYCLES				(0)		// ff: default number of cycles to boost up/down thresholds
 #define DEF_INPUTBOOST_UP_THRESHOLD			(80)		// ff: default up threshold for inputbooster
 #define DEF_INPUTBOOST_PUNCH_CYCLES			(20)		// ff: default number of cycles to meet or exceed punch freq
-#define DEF_INPUTBOOST_PUNCH_FREQ			(1574400)	// ff: default frequency to keep cur_freq at or above
+#define DEF_INPUTBOOST_PUNCH_FREQ			(600000)	// ff: default frequency to keep cur_freq at or above
 #define DEF_INPUTBOOST_PUNCH_ON_FINGERDOWN		(0)		// ff: default for constant punching (like a touchbooster)
 #define DEF_INPUTBOOST_PUNCH_ON_FINGERMOVE		(0)		// ff: default for constant punching (like a touchbooster)
 #define DEF_INPUTBOOST_PUNCH_ON_EPENMOVE		(0)		// ff: default for constant punching (like a touchbooster)
