@@ -123,7 +123,7 @@
  */
 
 // NOTE: profile values in this version are mainly for One Plus One devices but might be compatible with other qualcomm devices too!
-static char profiles_file_version[20] = "0.3 beta3 OPO";
+static char profiles_file_version[20] = "v1 Moto G profile";
 #define PROFILE_TABLE_END ~1
 #define END_OF_PROFILES "end"
 
@@ -412,139 +412,139 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		2,
 		"ybat",	// Yank555.lu Battery Profile (please don't remove this profile)
 				// Reuse yank battery profile to suit Moto G freq
-		0,		// auto_adjust_freq_thresholds
+		0,		// auto_adjust_freq_thresholds (any value=enable, 0=disable)
 #ifdef ENABLE_HOTPLUGGING
-		0,		// enable_hotplug
+		0,		// disable_hotplug (1=disable hotplugging, 0=enable hotplugging)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// disable_hotplug_sleep
+		0,		// disable_hotplug_sleep (1=disable hotplugging, 0=enable hotplugging)
 #endif
 #endif
-		40,		// down_threshold
+		40,		// down_threshold (range from 11 to 100 and must be lower than up_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		65,		// down_threshold_hotplug1
+		65,		// down_threshold_hotplug1 (range from 1 to 100 and should be lower than up_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		75,		// down_threshold_hotplug2
-		85,		// down_threshold_hotplug3
-		55,		// down_threshold_hotplug4
+		75,		// down_threshold_hotplug2 (range from 1 to 100 and should be lower than up_threshold_hotplug2)
+		85,		// down_threshold_hotplug3 (range from 1 to 100 and should be lower than up_threshold_hotplug3)
+		55,		// down_threshold_hotplug4 (range from 1 to 100 and should be lower than up_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		55,		// down_threshold_hotplug5
-		55,		// down_threshold_hotplug6
-		55,		// down_threshold_hotplug7
+		55,		// down_threshold_hotplug5 (range from 1 to 100 and should be lower than up_threshold_hotplug5)
+		55,		// down_threshold_hotplug6 (range from 1 to 100 and should be lower than up_threshold_hotplug6)
+		55,		// down_threshold_hotplug7 (range from 1 to 100 and should be lower than up_threshold_hotplug7)
 #endif
-		300000,	// down_threshold_hotplug_freq1
+		300000,		// down_threshold_hotplug_freq1 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		300000,	// down_threshold_hotplug_freq2
-		300000,	// down_threshold_hotplug_freq3
-		300000,	// down_threshold_hotplug_freq4
+		300000,	// down_threshold_hotplug_freq2 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq2)
+		300000,	// down_threshold_hotplug_freq3 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq3)
+		300000,	// down_threshold_hotplug_freq4 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// down_threshold_hotplug_freq5
-		0,		// down_threshold_hotplug_freq6
-		0,		// down_threshold_hotplug_freq7
+		0,		// down_threshold_hotplug_freq5 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq5)
+		0,		// down_threshold_hotplug_freq6 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq6)
+		0,		// down_threshold_hotplug_freq7 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		75,		// down_threshold_sleep
+		75,		// down_threshold_sleep (range from 11 to 100 and must be lower than up_threshold_sleep)
 #endif
-		0,		// early_demand
+		0,		// early_demand (any value=enable, 0=disable)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// early_demand_sleep
+		0,		// early_demand_sleep (any value=enable, 0=disable)
 #endif
-		5,		// fast_scaling_up
-		2,		// fast_scaling_down
+		5,		// fast_scaling_up (range from 0 to 4)
+		2,		// fast_scaling_down (range from 0 to 4)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// fast_scaling_sleep_up
-		0,		// fast_scaling_sleep_down
+		0,		// fast_scaling_sleep_up (range from 0 to 4)
+		0,		// fast_scaling_sleep_down (range from 0 to 4)
 #endif
-		30,		// afs_threshold1
-		50,		// afs_threshold2
-		70,		// afs_threshold3
-		90,		// afs_threshold4
-		0,		// freq_limit
+		30,		// auto fast scaling step one (range from 1 to 100)
+		50,		// auto fast scaling step two (range from 1 to 100)
+		75,		// auto fast scaling step three (range from 1 to 100)
+		90,		// auto fast scaling step four (range from 1 to 100)
+		0,		// freq_limit (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// freq_limit_slee - occupied for msm_limiter
+		0,		// freq_limit_sleep (0=disable, range in system table from freq->min to freq->max in khz)
 #endif
-		50,		// grad_up_threshold
+		50,		// grad_up_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		28,		// grad_up_threshold_sleep
+		28,		// grad_up_threshold_sleep (range from 1 to 100)
 #endif
 #ifdef ENABLE_HOTPLUGGING
-		10,		// hotplug_up_block_cycles
-		1,		// block_up_multiplier_hotplug1
-		1,		// block_up_multiplier_hotplug2
-		1,		// block_up_multiplier_hotplug3
-		35,		// hotplug_block_down_cycles
-		1,		// block_down_multiplier_hotplug1
-		1,		// block_down_multiplier_hotplug2
-		1,		// block_down_multiplier_hotplug3
-		0,		// hotplug_stagger_up
-		0,		// hotplug_stagger_down
-		0,		// hotplug_idle_threshold
-		0,		// hotplug_idle_freq
+		10,		// hotplug_up_block_cycles (0=disable, any value above 0)
+		1,		// block_up_multiplier_hotplug1 (0=disable hotplug_up_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug2 (0=disable hotplug_up_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug3 (0=disable hotplug_up_block_cycles for 4th core, 1 to 10x)
+		35,		// hotplug_block_down_cycles (0=disable, any value above 0)
+		1,		// block_down_multiplier_hotplug1 (0=disable hotplug_down_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug2 (0=disable hotplug_down_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug3 (0=disable hotplug_down_block_cycles for 4th core, 1 to 10x)
+		0,		// hotplug_stagger_up (0=disable, any value above 0)
+		0,		// hotplug_stagger_down (0=disable, any value above 0)
+		0,		// hotplug_idle_threshold (0=disable, range from 1 to 100)
+		0,		// hotplug_idle_freq (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		1,		// hotplug_sleep
+		1,		// hotplug_sleep (0=all cores enabled, range 1 to MAX_CORES - 1)
 #endif
-		0,		// hotplug_engage_freq
-		0,		// hotplug_max_limit
-		0,		// hotplug_min_limit
-		0,		// hotplug_lock
+		0,		// hotplug_engage_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		0,		// hotplug_max_limit (0=disable, range from 1 to 8 cores)
+		0,		// hotplug_min_limit (0=disable, range from 1 to 8 cores)
+		0,		// hotplug_lock (0=disable, range from 1 to 8 cores)
 #endif
-		0,		// ignore_nice_load
-		1,		// sampling_down_factor
-		0,		// sampling_down_max_momentum
-		50,		// sampling_down_momentum_sensitivity
-		75000,	// sampling_rate
-		180000,	// sampling_rate_idle
-		0,		// sampling_rate_idle_delay
-		40,		// sampling_rate_idle_threshold
+		0,		// ignore_nice_load (0=disable, 1=enable)
+		1,		// sampling_down_factor (1=disable, range from 2 to MAX_SAMPLING_DOWN_FACTOR)
+		0,		// sampling_down_max_momentum (0=disable, range from 1 to MAX_SAMPLING_DOWN_FACTOR)
+		50,		// sampling_down_momentum_sensitivity (range from 1 to MAX_SAMPLING_DOWN_SENSITIVITY)
+		75000,	// sampling_rate (range from MIN_SAMPLING_RATE to any value)
+		180000,	// sampling_rate_idle (range from MIN_SAMPLING_RATE to any value)
+		0,		// sampling_rate_idle_delay (0=disable, any value above 0)
+		40,		// sampling_rate_idle_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		6,		// sampling_rate_sleep_multiplier
+		6,		// sampling_rate_sleep_multiplier (range from 1 to 4)
 #endif
-		0,		// scaling_block_cycles
+		0,		// scaling_block_cycles (0=disable, any value above 0)
 #ifdef CONFIG_EXYNOS4_EXPORT_TEMP
-		0,		// scaling_block_temp
+		0,		// scaling_block_temp (0=disable, range from 30°C to 80°C)
 #endif
-		0,		// scaling_block_freq
-		0,		// scaling_block_threshold
-		2,		// scaling_block_force_down
-		384000,	// scaling_fastdown_freq
-		95,		// scaling_fastdown_up_threshold
-		90,		// scaling_fastdown_down_threshold
-		787200,	// scaling_responsiveness_freq
-		20,		// scaling_responsiveness_up_threshold
-		1,		// scaling_proportional
-		95,		// smooth_up
+		0,		// scaling_block_freq (all valid system frequencies)
+		0,		// scaling_block_threshold (0=disable, range from 1 to 100)
+		2,		// scaling_block_force_down (0=disable, range from 2 to any value)
+		384000,		// scaling_fastdown_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		95,		// scaling_fastdown_up_threshold (range from over scaling_fastdown_down_threshold to 100)
+		90,		// scaling_fastdown_down_threshold (range from 11 to under scaling_fastdown_up_threshold)
+		787200,		// scaling_responsiveness_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		20,		// scaling_responsiveness_up_threshold (0=disable, range from 11 to 100)
+		1,		// scaling_proportional (0=disable, any value above 0)
+		95,		// smooth_up (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		90,		// smooth_up_sleep
+		90,		// smooth_up_sleep (range from 1 to 100)
 #endif
-		60,		// up_threshold
+		60,		// up_threshold (range 1 to 100 and must be higher than down_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		85,		// up_threshold_hotplug1
+		85,		// up_threshold_hotplug1 (range 1 to 100 and should be higher than down_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		90,		// up_threshold_hotplug2
-		98,		// up_threshold_hotplug3
-		68,		// up_threshold_hotplug4
+		90,		// up_threshold_hotplug2 (range 1 to 100 and should be higher than down_threshold_hotplug2)
+		98,		// up_threshold_hotplug3 (range 1 to 100 and should be higher than down_threshold_hotplug3)
+		68,		// up_threshold_hotplug4 (range 1 to 100 and should be higher than down_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		68,		// up_threshold_hotplug5
-		68,		// up_threshold_hotplug6
-		68,		// up_threshold_hotplug7
+		68,		// up_threshold_hotplug5 (range 1 to 100 and should be higher than down_threshold_hotplug5)
+		68,		// up_threshold_hotplug6 (range 1 to 100 and should be higher than down_threshold_hotplug6)
+		68,		// up_threshold_hotplug7 (range 1 to 100 and should be higher than down_threshold_hotplug7)
 #endif
-		787200,	// up_threshold_hotplug_freq1
+		787200,		// up_threshold_hotplug_freq1 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		998400,	// up_threshold_hotplug_freq2
-		1190400,	// up_threshold_hotplug_freq3
-		384000,		// up_threshold_hotplug_freq4
+		998400,		// up_threshold_hotplug_freq2 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq2)
+		1190400,		// up_threshold_hotplug_freq3 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq3)
+		384000,		// up_threshold_hotplug_freq4 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// up_threshold_hotplug_freq5
-		0,		// up_threshold_hotplug_freq6
-		0,		// up_threshold_hotplug_freq7
+		0,		// up_threshold_hotplug_freq5 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq5)
+		0,		// up_threshold_hotplug_freq6 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq6)
+		0,		// up_threshold_hotplug_freq7 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		85		// up_threshold_sleep
+		85		// up_threshold_sleep (range from above down_threshold_sleep to 100)
 #endif
 	},
 /*
@@ -554,285 +554,286 @@ struct zzmoove_profile zzmoove_profiles[] = {
 		3,
 		"ybatext",	// Yank555.lu Battery Extreme Profile (please don't remove this profile)
 					// Reuse yank Extreme battery profile to suit Moto G freq (disable 1 core)
-		0,		// auto_adjust_freq_thresholds
+		0,			// auto_adjust_freq_thresholds
 #ifdef ENABLE_HOTPLUGGING
-		0,		// enable_hotplug
+		0,		// disable_hotplug (1=disable hotplugging, 0=enable hotplugging)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// disable_hotplug_sleep
+		0,		// disable_hotplug_sleep (1=disable hotplugging, 0=enable hotplugging)
 #endif
 #endif
-		50,		// down_threshold
+		50,		// down_threshold (range from 11 to 100 and must be lower than up_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		70,		// down_threshold_hotplug1
+		70,		// down_threshold_hotplug1 (range from 1 to 100 and should be lower than up_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		80,		// down_threshold_hotplug2
-		90,		// down_threshold_hotplug3
-		55,		// down_threshold_hotplug4
+		80,		// down_threshold_hotplug2 (range from 1 to 100 and should be lower than up_threshold_hotplug2)
+		90,		// down_threshold_hotplug3 (range from 1 to 100 and should be lower than up_threshold_hotplug3)
+		55,		// down_threshold_hotplug4 (range from 1 to 100 and should be lower than up_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		55,		// down_threshold_hotplug5
-		55,		// down_threshold_hotplug6
-		55,		// down_threshold_hotplug7
+		55,		// down_threshold_hotplug5 (range from 1 to 100 and should be lower than up_threshold_hotplug5)
+		55,		// down_threshold_hotplug6 (range from 1 to 100 and should be lower than up_threshold_hotplug6)
+		55,		// down_threshold_hotplug7 (range from 1 to 100 and should be lower than up_threshold_hotplug7)
 #endif
-		300000,		// down_threshold_hotplug_freq1
+		300000,		// down_threshold_hotplug_freq1 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		300000,	// down_threshold_hotplug_freq2
-		300000,	// down_threshold_hotplug_freq3
-		0,		// down_threshold_hotplug_freq4
+		300000,	// down_threshold_hotplug_freq2 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq2)
+		300000,	// down_threshold_hotplug_freq3 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq3)
+		0,	// down_threshold_hotplug_freq4 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// down_threshold_hotplug_freq5
-		0,		// down_threshold_hotplug_freq6
-		0,		// down_threshold_hotplug_freq7
+		0,		// down_threshold_hotplug_freq5 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq5)
+		0,		// down_threshold_hotplug_freq6 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq6)
+		0,		// down_threshold_hotplug_freq7 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		75,		// down_threshold_sleep
+		75,		// down_threshold_sleep (range from 11 to 100 and must be lower than up_threshold_sleep)
 #endif
-		0,		// early_demand
+		1,		// early_demand (any value=enable, 0=disable)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		1,		// early_demand_sleep
+		1,		// early_demand_sleep (any value=enable, 0=disable)
 #endif
-		5,		// fast_scaling_up
-		3,		// fast_scaling_down
+		4,		// fast_scaling_up (range from 0 to 4)
+		3,		// fast_scaling_down (range from 0 to 4)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// fast_scaling_sleep_up
-		0,		// fast_scaling_sleep_down
+		0,		// fast_scaling_sleep_up (range from 0 to 4)
+		0,		// fast_scaling_sleep_down (range from 0 to 4)
 #endif
-		30,		// afs_threshold1
-		50,		// afs_threshold2
-		70,		// afs_threshold3
-		90,		// afs_threshold4
-		0,		// freq_limit
+		30,		// auto fast scaling step one (range from 1 to 100)
+		50,		// auto fast scaling step two (range from 1 to 100)
+		75,		// auto fast scaling step three (range from 1 to 100)
+		90,		// auto fast scaling step four (range from 1 to 100)
+		0,		// freq_limit (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// freq_limit_sleep - occupied for msm_limiter
+		0,		// freq_limit_sleep (0=disable, range in system table from freq->min to freq->max in khz)
 #endif
-		50,		// grad_up_threshold
+		50,		// grad_up_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		28,		// grad_up_threshold_sleep
+		28,		// grad_up_threshold_sleep (range from 1 to 100)
 #endif
 #ifdef ENABLE_HOTPLUGGING
-		10,		// hotplug_up_block_cycles
-		1,		// block_up_multiplier_hotplug1
-		1,		// block_up_multiplier_hotplug2
-		1,		// block_up_multiplier_hotplug3
-		35,		// hotplug_block_down_cycles
-		1,		// block_down_multiplier_hotplug1
-		1,		// block_down_multiplier_hotplug2
-		1,		// block_down_multiplier_hotplug3
-		0,		// hotplug_stagger_up
-		0,		// hotplug_stagger_down
-		0,		// hotplug_idle_threshold
-		0,		// hotplug_idle_freq
+		10,		// hotplug_up_block_cycles (0=disable, any value above 0)
+		1,		// block_up_multiplier_hotplug1 (0=disable hotplug_up_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug2 (0=disable hotplug_up_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug3 (0=disable hotplug_up_block_cycles for 4th core, 1 to 10x)
+		35,		// hotplug_block_down_cycles (0=disable, any value above 0)
+		1,		// block_down_multiplier_hotplug1 (0=disable hotplug_down_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug2 (0=disable hotplug_down_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug3 (0=disable hotplug_down_block_cycles for 4th core, 1 to 10x)
+		0,		// hotplug_stagger_up (0=disable, any value above 0)
+		0,		// hotplug_stagger_down (0=disable, any value above 0)
+		0,		// hotplug_idle_threshold (0=disable, range from 1 to 100)
+		0,		// hotplug_idle_freq (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		1,		// hotplug_sleep
+		1,		// hotplug_sleep (0=all cores enabled, range 1 to MAX_CORES - 1)
 #endif
-		0,		// hotplug_engage_freq
-		0,		// hotplug_max_limit
-		0,		// hotplug_min_limit
-		0,		// hotplug_lock
+		0,		// hotplug_engage_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		0,		// hotplug_max_limit (0=disable, range from 1 to 8 cores)
+		0,		// hotplug_min_limit (0=disable, range from 1 to 8 cores)
+		0,		// hotplug_lock (0=disable, range from 1 to 8 cores)
 #endif
-		0,		// ignore_nice_load
-		1,		// sampling_down_factor
-		0,		// sampling_down_max_momentum
-		50,		// sampling_down_momentum_sensitivity
-		70000,	// sampling_rate
-		180000,	// sampling_rate_idle
-		0,		// sampling_rate_idle_delay
-		40,		// sampling_rate_idle_threshold
+		0,		// ignore_nice_load (0=disable, 1=enable)
+		1,		// sampling_down_factor (1=disable, range from 2 to MAX_SAMPLING_DOWN_FACTOR)
+		0,		// sampling_down_max_momentum (0=disable, range from 1 to MAX_SAMPLING_DOWN_FACTOR)
+		50,		// sampling_down_momentum_sensitivity (range from 1 to MAX_SAMPLING_DOWN_SENSITIVITY)
+		70000,	// sampling_rate (range from MIN_SAMPLING_RATE to any value)
+		180000,	// sampling_rate_idle (range from MIN_SAMPLING_RATE to any value)
+		0,		// sampling_rate_idle_delay (0=disable, any value above 0)
+		40,		// sampling_rate_idle_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		6,		// sampling_rate_sleep_multiplier
+		6,		// sampling_rate_sleep_multiplier (range from 1 to 4)
 #endif
-		0,		// scaling_block_cycles
+		0,		// scaling_block_cycles (0=disable, any value above 0)
 #ifdef CONFIG_EXYNOS4_EXPORT_TEMP
-		0,		// scaling_block_temp
+		0,		// scaling_block_temp (0=disable, range from 30°C to 80°C)
 #endif
-		0,		// scaling_block_freq
-		0,		// scaling_block_threshold
-		2,		// scaling_block_force_down
-		0,		// scaling_fastdown_freq
-		95,		// scaling_fastdown_up_threshold
-		90,		// scaling_fastdown_down_threshold
-		600000,	// scaling_responsiveness_freq
-		20,		// scaling_responsiveness_up_threshold
-		1,		// scaling_proportional
-		95,		// smooth_up
+		0,		// scaling_block_freq (all valid system frequencies)
+		0,		// scaling_block_threshold (0=disable, range from 1 to 100)
+		2,		// scaling_block_force_down (0=disable, range from 2 to any value)
+		300000,	// scaling_fastdown_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		95,		// scaling_fastdown_up_threshold (range from over scaling_fastdown_down_threshold to 100)
+		90,		// scaling_fastdown_down_threshold (range from 11 to under scaling_fastdown_up_threshold)
+		787200,	// scaling_responsiveness_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		20,		// scaling_responsiveness_up_threshold (0=disable, range from 11 to 100)
+		1,		// scaling_proportional (0=disable, any value above 0)
+		95,		// smooth_up (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		90,		// smooth_up_sleep
+		90,		// smooth_up_sleep (range from 1 to 100)
 #endif
-		70,		// up_threshold
+		70,		// up_threshold (range 1 to 100 and must be higher than down_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		90,		// up_threshold_hotplug1
+		90,		// up_threshold_hotplug1 (range 1 to 100 and should be higher than down_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		95,		// up_threshold_hotplug2
-		98,		// up_threshold_hotplug3
-		68,		// up_threshold_hotplug4
+		95,		// up_threshold_hotplug2 (range 1 to 100 and should be higher than down_threshold_hotplug2)
+		98,		// up_threshold_hotplug3 (range 1 to 100 and should be higher than down_threshold_hotplug3)
+		68,		// up_threshold_hotplug4 (range 1 to 100 and should be higher than down_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		68,		// up_threshold_hotplug5
-		68,		// up_threshold_hotplug6
-		68,		// up_threshold_hotplug7
+		68,		// up_threshold_hotplug5 (range 1 to 100 and should be higher than down_threshold_hotplug5)
+		68,		// up_threshold_hotplug6 (range 1 to 100 and should be higher than down_threshold_hotplug6)
+		68,		// up_threshold_hotplug7 (range 1 to 100 and should be higher than down_threshold_hotplug7)
 #endif
-		600000,	// up_threshold_hotplug_freq1
+		600000,	// up_threshold_hotplug_freq1 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		1094400,	// up_threshold_hotplug_freq2
-		1190400,	// up_threshold_hotplug_freq3
-		0,			// up_threshold_hotplug_freq4
+		1094400,// up_threshold_hotplug_freq2 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq2)
+		1190400,// up_threshold_hotplug_freq3 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq3)
+		0,		// up_threshold_hotplug_freq4 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// up_threshold_hotplug_freq5
-		0,		// up_threshold_hotplug_freq6
-		0,		// up_threshold_hotplug_freq7
+		0,		// up_threshold_hotplug_freq5 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq5)
+		0,		// up_threshold_hotplug_freq6 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq6)
+		0,		// up_threshold_hotplug_freq7 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		85		// up_threshold_sleep
+		85		// up_threshold_sleep (range from above down_threshold_sleep to 100)
 #endif
 	},
-
 /*
  * Seperator for profile no 4
  */
-
 	{
 		4,
 		"zzperf",	// ZaneZam Performance Profile (please don't remove this profile)
 					// Enhanced zanzam performance for Moto G and make it extreme performance
-		0,		// auto_adjust_freq_thresholds
+		0,			// auto_adjust_freq_thresholds
 #ifdef ENABLE_HOTPLUGGING
-		0,		// enable_hotplug
+		0,		// disable_hotplug (1=disable hotplugging, 0=enable hotplugging)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// disable_hotplug_sleep
+		0,		// disable_hotplug_sleep (1=disable hotplugging, 0=enable hotplugging)
 #endif
 #endif
-		20,		// down_threshold
+		20,		// down_threshold (range from 11 to 100 and must be lower than up_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		25,		// down_threshold_hotplug1
+		25,		// down_threshold_hotplug1 (range from 1 to 100 and should be lower than up_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		35,		// down_threshold_hotplug2
-		45,		// down_threshold_hotplug3
-		55,		// down_threshold_hotplug4
+		35,		// down_threshold_hotplug2 (range from 1 to 100 and should be lower than up_threshold_hotplug2)
+		45,		// down_threshold_hotplug3 (range from 1 to 100 and should be lower than up_threshold_hotplug3)
+		55,		// down_threshold_hotplug4 (range from 1 to 100 and should be lower than up_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		55,		// down_threshold_hotplug5
-		55,		// down_threshold_hotplug6
-		55,		// down_threshold_hotplug7
+		55,		// down_threshold_hotplug5 (range from 1 to 100 and should be lower than up_threshold_hotplug5)
+		55,		// down_threshold_hotplug6 (range from 1 to 100 and should be lower than up_threshold_hotplug6)
+		55,		// down_threshold_hotplug7 (range from 1 to 100 and should be lower than up_threshold_hotplug7)
 #endif
-		600000,	// down_threshold_hotplug_freq1
+		600000,		// down_threshold_hotplug_freq1 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		600000,	// down_threshold_hotplug_freq2
-		600000,	// down_threshold_hotplug_freq3
-		0,		// down_threshold_hotplug_freq4
+		600000,	// down_threshold_hotplug_freq2 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq2)
+		600000,	// down_threshold_hotplug_freq3 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq3)
+		0,	// down_threshold_hotplug_freq4 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// down_threshold_hotplug_freq5
-		0,		// down_threshold_hotplug_freq6
-		0,		// down_threshold_hotplug_freq7
+		0,		// down_threshold_hotplug_freq5 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq5)
+		0,		// down_threshold_hotplug_freq6 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq6)
+		0,		// down_threshold_hotplug_freq7 (range from 0 to scaling max and should be lower than up_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		60,		// down_threshold_sleep
+		75,		// down_threshold_sleep (range from 11 to 100 and must be lower than up_threshold_sleep)
 #endif
-		1,		// early_demand
+		1,		// early_demand (any value=enable, 0=disable)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		1,		// early_demand_sleep
+		1,		// early_demand_sleep (any value=enable, 0=disable)
 #endif
-		1,		// fast_scaling_up
-		1,		// fast_scaling_down
+		1,		// fast_scaling_up (range from 0 to 4)
+		1,		// fast_scaling_down (range from 0 to 4)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		2,		// fast_scaling_sleep_up
-		0,		// fast_scaling_sleep_down
+		2,		// fast_scaling_sleep_up (range from 0 to 4)
+		0,		// fast_scaling_sleep_down (range from 0 to 4)
 #endif
-		30,		// afs_threshold1
-		50,		// afs_threshold2
-		70,		// afs_threshold3
-		90,		// afs_threshold4
-		0,		// freq_limit
+		30,		// auto fast scaling step one (range from 1 to 100)
+		50,		// auto fast scaling step two (range from 1 to 100)
+		75,		// auto fast scaling step three (range from 1 to 100)
+		90,		// auto fast scaling step four (range from 1 to 100)
+		0,		// freq_limit (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		0,		// freq_limit_slee - occupied for msm_limiter
+		0,		// freq_limit_sleep (0=disable, range in system table from freq->min to freq->max in khz)
 #endif
-		25,		// grad_up_threshold
+		25,		// grad_up_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		28,		// grad_up_threshold_sleep
+		28,		// grad_up_threshold_sleep (range from 1 to 100)
 #endif
 #ifdef ENABLE_HOTPLUGGING
-		10,		// hotplug_up_block_cycles
-		1,		// block_up_multiplier_hotplug1
-		1,		// block_up_multiplier_hotplug2
-		1,		// block_up_multiplier_hotplug3
-		35,		// hotplug_block_down_cycles
-		1,		// block_down_multiplier_hotplug1
-		1,		// block_down_multiplier_hotplug2
-		1,		// block_down_multiplier_hotplug3
-		0,		// hotplug_stagger_up
-		0,		// hotplug_stagger_down
-		0,		// hotplug_idle_threshold
-		0,		// hotplug_idle_freq
+		10,		// hotplug_up_block_cycles (0=disable, any value above 0)
+		1,		// block_up_multiplier_hotplug1 (0=disable hotplug_up_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug2 (0=disable hotplug_up_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_up_multiplier_hotplug3 (0=disable hotplug_up_block_cycles for 4th core, 1 to 10x)
+		35,		// hotplug_block_down_cycles (0=disable, any value above 0)
+		1,		// block_down_multiplier_hotplug1 (0=disable hotplug_down_block_cycles for 2nd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug2 (0=disable hotplug_down_block_cycles for 3rd core, 1 to 10x)
+		1,		// block_down_multiplier_hotplug3 (0=disable hotplug_down_block_cycles for 4th core, 1 to 10x)
+		0,		// hotplug_stagger_up (0=disable, any value above 0)
+		0,		// hotplug_stagger_down (0=disable, any value above 0)
+		0,		// hotplug_idle_threshold (0=disable, range from 1 to 100)
+		0,		// hotplug_idle_freq (0=disable, range in system table from freq->min to freq->max in khz)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		1,		// hotplug_sleep
+		1,		// hotplug_sleep (0=all cores enabled, range 1 to MAX_CORES - 1)
 #endif
-		0,		// hotplug_engage_freq
-		0,		// hotplug_max_limit
-		0,		// hotplug_min_limit
-		1,		// hotplug_lock
+		0,		// hotplug_engage_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		0,		// hotplug_max_limit (0=disable, range from 1 to 8 cores)
+		60000,	// hotplug_min_limit (0=disable, range from 1 to 8 cores)
+		4,		// hotplug_lock (0=disable, range from 1 to 8 cores)
 #endif
-		0,		// ignore_nice_load
-		4,		// sampling_down_factor
-		50,		// sampling_down_max_momentum
-		25,		// sampling_down_momentum_sensitivity
-		60000,	// sampling_rate
-		100000,	// sampling_rate_idle
-		0,		// sampling_rate_idle_delay
-		40,		// sampling_rate_idle_threshold
+		0,		// ignore_nice_load (0=disable, 1=enable)
+		4,		// sampling_down_factor (1=disable, range from 2 to MAX_SAMPLING_DOWN_FACTOR)
+		50,		// sampling_down_max_momentum (0=disable, range from 1 to MAX_SAMPLING_DOWN_FACTOR)
+		25,		// sampling_down_momentum_sensitivity (range from 1 to MAX_SAMPLING_DOWN_SENSITIVITY)
+		60000,	// sampling_rate (range from MIN_SAMPLING_RATE to any value)
+		100000,	// sampling_rate_idle (range from MIN_SAMPLING_RATE to any value)
+		0,		// sampling_rate_idle_delay (0=disable, any value above 0)
+		40,		// sampling_rate_idle_threshold (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		6,		// sampling_rate_sleep_multiplier
+		6,		// sampling_rate_sleep_multiplier (range from 1 to 4)
 #endif
-		0,		// scaling_block_cycles
+		0,		// scaling_block_cycles (0=disable, any value above 0)
 #ifdef CONFIG_EXYNOS4_EXPORT_TEMP
-		0,		// scaling_block_temp
+		0,		// scaling_block_temp (0=disable, range from 30°C to 80°C)
 #endif
-		0,		// scaling_block_freq
-		0,		// scaling_block_threshold
-		2,		// scaling_block_force_down
-		600000,	// scaling_fastdown_freq
-		95,		// scaling_fastdown_up_threshold
-		90,		// scaling_fastdown_down_threshold
-		787200,	// scaling_responsiveness_freq
-		0,		// scaling_responsiveness_up_threshold
-		0,		// scaling_proportional
-		70,		// smooth_up
+		0,		// scaling_block_freq (all valid system frequencies)
+		0,		// scaling_block_threshold (0=disable, range from 1 to 100)
+		2,		// scaling_block_force_down (0=disable, range from 2 to any value)
+		600000,	// scaling_fastdown_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		95,		// scaling_fastdown_up_threshold (range from over scaling_fastdown_down_threshold to 100)
+		90,		// scaling_fastdown_down_threshold (range from 11 to under scaling_fastdown_up_threshold)
+		787200,	// scaling_responsiveness_freq (0=disable, range in system table from freq->min to freq->max in khz)
+		15,		// scaling_responsiveness_up_threshold (0=disable, range from 11 to 100)
+		0,		// scaling_proportional (0=disable, any value above 0)
+		70,		// smooth_up (range from 1 to 100)
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		100,		// smooth_up_sleep
+		90,		// smooth_up_sleep (range from 1 to 100)
 #endif
-		60,		// up_threshold
+		60,		// up_threshold (range 1 to 100 and must be higher than down_threshold)
 #ifdef ENABLE_HOTPLUGGING
-		65,		// up_threshold_hotplug1
+		65,		// up_threshold_hotplug1 (range 1 to 100 and should be higher than down_threshold_hotplug1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		75,		// up_threshold_hotplug2
-		85,		// up_threshold_hotplug3
-		68,		// up_threshold_hotplug4
+		75,		// up_threshold_hotplug2 (range 1 to 100 and should be higher than down_threshold_hotplug2)
+		85,		// up_threshold_hotplug3 (range 1 to 100 and should be higher than down_threshold_hotplug3)
+		68,		// up_threshold_hotplug4 (range 1 to 100 and should be higher than down_threshold_hotplug4)
 #endif
 #if (MAX_CORES == 8)
-		68,		// up_threshold_hotplug5
-		68,		// up_threshold_hotplug6
-		68,		// up_threshold_hotplug7
+		68,		// up_threshold_hotplug5 (range 1 to 100 and should be higher than down_threshold_hotplug5)
+		68,		// up_threshold_hotplug6 (range 1 to 100 and should be higher than down_threshold_hotplug6)
+		68,		// up_threshold_hotplug7 (range 1 to 100 and should be higher than down_threshold_hotplug7)
 #endif
-		998400,		// up_threshold_hotplug_freq1
+		1094400,	// up_threshold_hotplug_freq1 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq1)
 #if (MAX_CORES == 4 || MAX_CORES == 8)
-		1094400,	// up_threshold_hotplug_freq2
-		1094400,	// up_threshold_hotplug_freq3
-		1190400,		// up_threshold_hotplug_freq4
+		1190400,// up_threshold_hotplug_freq2 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq2)
+		1190400,// up_threshold_hotplug_freq3 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq3)
+		1190400,		// up_threshold_hotplug_freq4 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq4)
 #endif
 #if (MAX_CORES == 8)
-		0,		// up_threshold_hotplug_freq5
-		0,		// up_threshold_hotplug_freq6
-		0,		// up_threshold_hotplug_freq7
+		0,		// up_threshold_hotplug_freq5 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq5)
+		0,		// up_threshold_hotplug_freq6 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq6)
+		0,		// up_threshold_hotplug_freq7 (0 to disable core, range from 1 to scaling max and should be higher than down_threshold_hotplug_freq7)
 #endif
 #endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_POWERSUSPEND) || defined(CONFIG_BACKLIGHT_EXT_CONTROL)
-		100		// up_threshold_sleep
+		100		// up_threshold_sleep (range from above down_threshold_sleep to 100)
 #endif
 	},
+/*
+ *  End of profile
+ */
 	{
 		PROFILE_TABLE_END,
 		END_OF_PROFILES,// End of table entry (DON'T REMOVE THIS PROFILE !!!)
