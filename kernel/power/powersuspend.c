@@ -41,6 +41,8 @@ static DEFINE_SPINLOCK(state_lock);
 
 static int state;
 
+bool screen_on = true;
+
 void register_power_suspend(struct power_suspend *handler)
 {
 	struct list_head *pos;

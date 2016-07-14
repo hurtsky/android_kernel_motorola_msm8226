@@ -790,6 +790,7 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_hook(POWER_SUSPEND_INACTIVE);
+	screen_on = true;
 #endif
 
 	ctrl = container_of(pdata, struct mdss_dsi_ctrl_pdata,
@@ -912,6 +913,7 @@ static int mdss_dsi_panel_off(struct mdss_panel_data *pdata)
 
 #ifdef CONFIG_POWERSUSPEND
 	set_power_suspend_state_hook(POWER_SUSPEND_ACTIVE);
+	screen_on = false;
 #endif
 
 	if (!mfd->quickdraw_in_progress)
