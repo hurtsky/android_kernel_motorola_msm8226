@@ -38,6 +38,13 @@
 #include <linux/input/mt.h>
 #endif
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+#include <linux/powersuspend.h>
+#include <linux/input/sweep2wake.h>
+#include <linux/input/doubletap2wake.h>
+extern bool prox_covered;
+#endif
+
 #define DRIVER_NAME "synaptics_dsx_i2c"
 #define INPUT_PHYS_NAME "synaptics_dsx_i2c/input0"
 #define TYPE_B_PROTOCOL
@@ -709,6 +716,8 @@ static int synaptics_dsx_panel_cb(struct notifier_block *nb,
 
 static int synaptics_rmi4_suspend(struct device *dev);
 
+static int prox_synaptics_rmi4_suspend(struct device *dev);
+
 static int synaptics_rmi4_resume(struct device *dev);
 
 static ssize_t synaptics_rmi4_f01_reset_store(struct device *dev,
@@ -1066,6 +1075,15 @@ static void synaptics_dsx_sensor_state(struct synaptics_rmi4_data *rmi4_data,
 
 		synaptics_rmi4_irq_enable(rmi4_data, true);
 			break;
+
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	case STATE_PREVENT_SLEEP:
+		synaptics_dsx_wait_for_idle(rmi4_data);
+		synaptics_rmi4_irq_enable(rmi4_data, false);
+		if (rmi4_data->sensor_sleep)
+			synaptics_rmi4_sensor_wake(rmi4_data);
+		break;
+#endif
 
 	case STATE_STANDBY:
 		synaptics_rmi4_irq_enable(rmi4_data, false);
@@ -2141,6 +2159,13 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 			return retval;
 		}
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+		if (s2w_switch == 1 || dt2w_switch > 0) {
+			if (!rmi4_data->irq_enabled)
+				irq_set_irq_wake(rmi4_data->irq, 1);
+		}
+#endif
+
 		dev_dbg(&rmi4_data->i2c_client->dev,
 				"%s: Started irq thread\n", __func__);
 
@@ -2151,6 +2176,12 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 			free_irq(rmi4_data->irq, rmi4_data);
 			rmi4_data->irq_enabled = false;
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP	
+		if (s2w_switch == 1 || dt2w_switch > 0) {
+			if (rmi4_data->irq_enabled)
+				irq_set_irq_wake(rmi4_data->irq, 0);
+		}
+#endif
 		dev_dbg(&rmi4_data->i2c_client->dev,
 				"%s: Stopped irq thread\n", __func__);
 		}
@@ -3676,6 +3707,49 @@ static int synaptics_rmi4_suspend(struct device *dev)
 	const struct synaptics_dsx_platform_data *platform_data =
 			rmi4_data->board;
 
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	if (s2w_switch == 1 || dt2w_switch > 0)
+	{
+		pr_info("Waiting for wake gesture\n");
+		return 0;
+
+	} else {
+#endif
+		synaptics_dsx_sensor_state(rmi4_data, STATE_SUSPEND);
+		rmi4_data->poweron = false;
+
+		if (rmi4_data->purge_enabled) {
+			int value = 1; /* set flag */
+			atomic_set(&rmi4_data->panel_off_flag, value);
+			pr_debug("touches purge is %s\n", value ? "ON" : "OFF");
+		}
+
+		if (!rmi4_data->touch_stopped) {
+			if (platform_data->regulator_en) {
+				regulator_disable(rmi4_data->regulator);
+				pr_debug("touch-vdd regulator is %s\n",
+					regulator_is_enabled(rmi4_data->regulator) ?
+					"on" : "off");
+			}
+
+			gpio_free(platform_data->reset_gpio);
+
+			rmi4_data->touch_stopped = true;
+		}
+
+		return 0;
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	}
+#endif
+}
+
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+static int prox_synaptics_rmi4_suspend(struct device *dev)
+{
+	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(dev);
+	const struct synaptics_dsx_platform_data *platform_data =
+			rmi4_data->board;
+
 	synaptics_dsx_sensor_state(rmi4_data, STATE_SUSPEND);
 	rmi4_data->poweron = false;
 
@@ -3701,6 +3775,13 @@ static int synaptics_rmi4_suspend(struct device *dev)
 	return 0;
 }
 
+void touch_suspend(void)
+{
+	prox_synaptics_rmi4_suspend(&(exp_fn_ctrl.rmi4_data_ptr->input_dev->dev));
+	pr_info("TOUCH SUSPEND!\n");
+}
+#endif
+
  /**
  * synaptics_rmi4_resume()
  *
@@ -3716,6 +3797,13 @@ static int synaptics_rmi4_resume(struct device *dev)
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(dev);
 
 	synaptics_dsx_resumeinfo_start(rmi4_data);
+
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+ 	if (s2w_switch == 1 || dt2w_switch > 0) {
+		if (screen_on)
+ 			synaptics_dsx_sensor_state(rmi4_data, STATE_ACTIVE);
+	}
+#endif
 
 	if (rmi4_data->touch_stopped) {
 		int retval;
@@ -3768,6 +3856,14 @@ static int synaptics_rmi4_resume(struct device *dev)
 
 	return 0;
 }
+
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+void touch_resume(void)
+{
+	synaptics_rmi4_resume(&(exp_fn_ctrl.rmi4_data_ptr->input_dev->dev));
+	pr_info("TOUCH RESUME!\n");
+}
+#endif
 
 static const struct dev_pm_ops synaptics_rmi4_dev_pm_ops = {
 	.suspend = synaptics_rmi4_suspend,

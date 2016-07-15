@@ -269,6 +269,9 @@ struct synaptics_rmi4_data {
 	int sensor_max_y;
 	int normal_mode;
 	bool irq_enabled;
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+	bool prevent_sleep;
+#endif
 	bool touch_stopped;
 	bool fingers_on_2d;
 	bool sensor_sleep;
@@ -316,6 +319,7 @@ struct f34_properties {
 #define SYNAPTICS_DSX_STATES { \
 	DSX(UNKNOWN), \
 	DSX(ACTIVE), \
+	DSX(PREVENT_SLEEP), \
 	DSX(STANDBY), \
 	DSX(SUSPEND), \
 	DSX(BL), \
