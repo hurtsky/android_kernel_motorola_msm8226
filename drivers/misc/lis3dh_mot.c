@@ -32,6 +32,7 @@
 #include <linux/uaccess.h>
 #include <linux/lis3dh_mot.h>
 #include <linux/regulator/consumer.h>
+#include <linux/powersuspend.h>
 
 #define NAME				"lis3dh"
 
@@ -1012,6 +1013,9 @@ static int lis3dh_resume(struct device *dev)
 	int ret = 0;
 
 	mutex_lock(&lis->lock);
+
+	if (!screen_on)
+		goto err;
 
 	/* The sensor is already enabled */
 	if (lis->mode & MODE_MOVEMENT) {

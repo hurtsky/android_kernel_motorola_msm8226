@@ -39,6 +39,7 @@
 #include <linux/workqueue.h>
 #include <linux/akm8963.h>
 #include <linux/regulator/consumer.h>
+#include <linux/powersuspend.h>
 
 #define AKM8963_DEBUG_IF	0
 
@@ -1329,6 +1330,9 @@ static int akm8963_suspend(struct akm8963_data *akm)
 
 static int akm8963_resume(struct akm8963_data *akm)
 {
+	if (!screen_on)
+		return 0;
+
 	dev_info(&akm->i2c->dev, "%s: Resume\n", __func__);
 
 	mutex_lock(&akm->state_mutex);
