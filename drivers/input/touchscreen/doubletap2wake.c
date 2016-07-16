@@ -318,9 +318,35 @@ static ssize_t dt2w_doubletap2wake_show(struct device *dev,
 static ssize_t dt2w_doubletap2wake_dump(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
+	int dt2w_switch_old = dt2w_switch;
+	int rc = 0;
+	
 	if (buf[0] >= '0' && buf[0] <= '2' && buf[1] == '\n')
 		if (dt2w_switch != buf[0] - '0')
 			dt2w_switch = buf[0] - '0';
+
+	if (dt2w_switch > 1)
+		dt2w_switch = 1;
+	if (dt2w_switch < 0)
+		dt2w_switch = 0;
+
+	if (dt2w_switch_old == dt2w_switch)
+		return count;
+
+	if (dt2w_switch) {
+		dt2w_input_wq = create_workqueue("dt2wiwq");
+		if (!dt2w_input_wq) {
+			pr_err("%s: Failed to create dt2wiwq workqueue\n", __func__);
+			return -EFAULT;
+		}
+		INIT_WORK(&dt2w_input_work, dt2w_input_callback);
+		rc = input_register_handler(&dt2w_input_handler);
+		if (rc)
+			pr_err("%s: Failed to register dt2w_input_handler\n", __func__);
+	} else {
+		input_unregister_handler(&dt2w_input_handler);
+		destroy_workqueue(dt2w_input_wq);
+	}
 
 	return count;
 }
@@ -376,15 +402,17 @@ static int __init doubletap2wake_init(void)
 		goto err_input_dev;
 	}
 
-	dt2w_input_wq = create_workqueue("dt2wiwq");
-	if (!dt2w_input_wq) {
-		pr_err("%s: Failed to create dt2wiwq workqueue\n", __func__);
-		return -EFAULT;
+	if (dt2w_switch) {
+		dt2w_input_wq = create_workqueue("dt2wiwq");
+		if (!dt2w_input_wq) {
+			pr_err("%s: Failed to create dt2wiwq workqueue\n", __func__);
+			return -EFAULT;
+		}
+		INIT_WORK(&dt2w_input_work, dt2w_input_callback);
+		rc = input_register_handler(&dt2w_input_handler);
+		if (rc)
+			pr_err("%s: Failed to register dt2w_input_handler\n", __func__);
 	}
-	INIT_WORK(&dt2w_input_work, dt2w_input_callback);
-	rc = input_register_handler(&dt2w_input_handler);
-	if (rc)
-		pr_err("%s: Failed to register dt2w_input_handler\n", __func__);
 
 	register_power_suspend(&dt2w_suspend_handler);
 
