@@ -570,9 +570,11 @@ static void ct406_prox_mode_uncovered(struct ct406_data *ct)
 	ct406_write_prox_thresholds(ct);
 #ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
 	if (s2w_switch == 1 || dt2w_switch > 0) {
-		prox_covered = false;
-		if (ct_active)
-			touch_resume();
+		if (!s2w_call_activity || !dt2w_call_activity) {
+			prox_covered = false;
+			if (ct_active)
+				touch_resume();
+		}
 	}	
 #endif
 	pr_info("%s: Prox mode uncovered\n", __func__);
@@ -593,9 +595,11 @@ static void ct406_prox_mode_covered(struct ct406_data *ct)
 	ct406_write_prox_thresholds(ct);
 #ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
 	if (s2w_switch == 1 || dt2w_switch > 0) {
-		prox_covered = true;
-		if (ct_active)
-			touch_suspend();
+		if (!s2w_call_activity || !dt2w_call_activity) {
+			prox_covered = true;
+			if (ct_active)
+				touch_suspend();
+		}
 	}
 #endif
 	pr_info("%s: Prox mode covered\n", __func__);
@@ -1480,25 +1484,29 @@ static void ct406_work_prox_start(struct work_struct *work)
 static void ct_suspend(struct power_suspend *h)
 {
 	if (s2w_switch == 1 || dt2w_switch > 0) {
-		if (forced) {
+		if (!s2w_call_activity || !dt2w_call_activity) {
+			if (forced) {
 				ct406_disable_prox(ct406_misc_data);
 				forced = false;
-		}
-		ct_active = false;
+			}
+			ct_active = false;
 
-		if (screen_on)
-			touch_resume();
+			if (screen_on)
+				touch_resume();
+		}
 	}
 }
 
 static void ct_resume(struct power_suspend *h)
 {
 	if (s2w_switch == 1 || dt2w_switch > 0) {
-		if (!ct406_misc_data->prox_enabled) {
-			forced = true;
-			ct406_enable_prox(ct406_misc_data);
+		if (!s2w_call_activity || !dt2w_call_activity) {
+			if (!ct406_misc_data->prox_enabled) {
+				forced = true;
+				ct406_enable_prox(ct406_misc_data);
+			}
+			ct_active = true;
 		}
-		ct_active = true;
 	}
 }
 
