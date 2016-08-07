@@ -56,12 +56,12 @@ static struct asmp_param_struct {
 	.max_cpus = CONFIG_NR_CPUS,
 	.min_cpus = 1,
 	.cpufreq_up = 99,
-	.cpufreq_down = 50,
+	.cpufreq_down = 60,
 	.cycle_up = 1,
 	.cycle_down = 1,
 };
 
-static unsigned int cycle = 0, delay0 = 1;
+static unsigned int cycle = 0, delay0 = 0;
 static unsigned long delay_jif = 0;
 static int enabled __read_mostly = 1;
 
