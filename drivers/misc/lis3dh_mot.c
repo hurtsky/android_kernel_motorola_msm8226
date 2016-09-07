@@ -1014,32 +1014,33 @@ static int lis3dh_resume(struct device *dev)
 
 	mutex_lock(&lis->lock);
 
-	if (!screen_on)
+	if (!screen_on) {
 		goto err;
-
-	/* The sensor is already enabled */
-	if (lis->mode & MODE_MOVEMENT) {
-		ret = disable_irq_wake(lis->irq);
-		if (ret < 0) {
-			dev_err(&lis->client->dev,
-				"Could not disable IRQ wake: %d\n", ret);
-			goto err;
-		}
-		if (lis->mode_before_suspend != lis->mode) {
-			ret = lis3dh_set_mode(lis, lis->mode_before_suspend);
+	} else {
+		/* The sensor is already enabled */
+		if (lis->mode & MODE_MOVEMENT) {
+			ret = disable_irq_wake(lis->irq);
 			if (ret < 0) {
 				dev_err(&lis->client->dev,
-					"Could not set mode to %d\n",
-					lis->mode_before_suspend);
+					"Could not disable IRQ wake: %d\n", ret);
 				goto err;
 			}
-		}
-	} else if (lis->on_before_suspend) {
-		ret = lis3dh_enable(lis);
-		if (ret < 0) {
-			dev_err(&lis->client->dev,
-				"resume failure\n");
-			goto err;
+			if (lis->mode_before_suspend != lis->mode) {
+				ret = lis3dh_set_mode(lis, lis->mode_before_suspend);
+				if (ret < 0) {
+					dev_err(&lis->client->dev,
+						"Could not set mode to %d\n",
+						lis->mode_before_suspend);
+					goto err;
+				}
+			}
+		} else if (lis->on_before_suspend) {
+			ret = lis3dh_enable(lis);
+			if (ret < 0) {
+				dev_err(&lis->client->dev,
+					"resume failure\n");
+				goto err;
+			}
 		}
 	}
 
